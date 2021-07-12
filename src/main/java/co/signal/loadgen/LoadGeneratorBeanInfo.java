@@ -15,18 +15,16 @@
  */
 package co.signal.loadgen;
 
+import com.google.common.collect.Iterables;
+import org.apache.jmeter.testbeans.BeanInfoSupport;
+import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.reflect.ClassFinder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.util.List;
-
-import com.google.common.base.Throwables;
-import com.google.common.collect.Iterables;
-
-import org.apache.jmeter.testbeans.BeanInfoSupport;
-import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.reflect.ClassFinder;
-import org.apache.log.Logger;
 
 /**
  * Creates the fields for the {@link LoadGenerator} GUI in JMeter.
@@ -36,7 +34,7 @@ import org.apache.log.Logger;
  */
 public class LoadGeneratorBeanInfo extends BeanInfoSupport {
 
-  private static final Logger log = LoggingManager.getLoggerForClass();
+  private static final Logger log = LoggerFactory.getLogger(LoadGeneratorBeanInfo.class);
 
   private static final String FILENAME = "fileName";
   private static final String VARIABLE_NAME = "variableName";
@@ -73,8 +71,8 @@ public class LoadGeneratorBeanInfo extends BeanInfoSupport {
       return ClassFinder.findClassesThatExtend(
           JMeterUtils.getSearchPaths(), new Class[] { SyntheticLoadGenerator.class });
     } catch (IOException e) {
-      log.fatalError("Exception finding SyntheticLoadGenerator implementations", e);
-      throw Throwables.propagate(e);
+      log.error("Exception finding SyntheticLoadGenerator implementations", e);
+      throw new RuntimeException(e);
     }
   }
 }

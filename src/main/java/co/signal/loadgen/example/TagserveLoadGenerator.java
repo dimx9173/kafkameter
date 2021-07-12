@@ -15,24 +15,20 @@
  */
 package co.signal.loadgen.example;
 
-import java.lang.reflect.Type;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-
-import javax.annotation.Nullable;
-
-import com.google.common.base.Throwables;
+import co.signal.loadgen.SyntheticLoadGenerator;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
-
-import co.signal.loadgen.SyntheticLoadGenerator;
+import javax.annotation.Nullable;
+import java.lang.reflect.Type;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 
 /**
  * Example {@link SyntheticLoadGenerator} which generates {@link TagRequestMetrics} messages
@@ -45,7 +41,7 @@ import co.signal.loadgen.SyntheticLoadGenerator;
  */
 public class TagserveLoadGenerator implements SyntheticLoadGenerator {
 
-  private static final Logger log = LoggingManager.getLoggerForClass();
+  private static final Logger log = LoggerFactory.getLogger(TagserveLoadGenerator.class);
 
   private static final Type SITE_CONFIGS_TYPE = new TypeToken<Map<String, SiteConfig>>() {}.getType();
 
@@ -132,8 +128,8 @@ public class TagserveLoadGenerator implements SyntheticLoadGenerator {
     try {
       return gson.fromJson(config, SITE_CONFIGS_TYPE);
     } catch (JsonParseException e) {
-      log.fatalError("Problem parsing json from config:\n" + config, e);
-      throw Throwables.propagate(e);
+      log.error("Problem parsing json from config:\n" + config, e);
+      throw new RuntimeException(e);
     }
   }
 }

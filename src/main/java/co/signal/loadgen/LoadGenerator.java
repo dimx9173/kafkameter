@@ -15,24 +15,21 @@
  */
 package co.signal.loadgen;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Map;
-
-import javax.annotation.Nullable;
-
 import com.google.common.base.Charsets;
-import com.google.common.base.Throwables;
 import com.google.common.io.Files;
-
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.annotation.Nullable;
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
 
 /**
  * Config Element which reads a Synthetic Load Description from a file, generates
@@ -43,7 +40,7 @@ import org.apache.log.Logger;
  */
 public class LoadGenerator extends ConfigTestElement implements TestBean, LoopIterationListener {
 
-  private static final Logger log = LoggingManager.getLoggerForClass();
+  private static final Logger log = LoggerFactory.getLogger(LoadGenerator.class);
 
   private String fileName;
   private String variableName;
@@ -66,8 +63,8 @@ public class LoadGenerator extends ConfigTestElement implements TestBean, LoopIt
           className, false, Thread.currentThread().getContextClassLoader()
       ).getConstructor(String.class).newInstance(config);
     } catch (Exception e) {
-      log.fatalError("Exception initializing Load Generator class: " + className, e);
-      throw Throwables.propagate(e);
+      log.error("Exception initializing Load Generator class: " + className, e);
+      throw new RuntimeException(e);
     }
   }
 

@@ -17,7 +17,7 @@ package co.signal.loadgen.example;
 
 import java.util.Set;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 
 /**
 * @author codyaray
@@ -42,7 +42,7 @@ class PageConfig {
 
   @Override
   public String toString() {
-    return Objects.toStringHelper(this)
+    return MoreObjects.toStringHelper(this)
         .add("weight", weight)
         .add("tags", tags)
         .toString();
